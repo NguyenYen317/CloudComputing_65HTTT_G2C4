@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# build outputs
+build/
+**/build/
+.dart_tool/
+.firebase/
+.cache/
+
+# env / secrets
+.env
+.env.*
+*.pem
+*.key
+*service-account*.json
+*credentials*.json
+application_default_credentials.json
+
+# logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
