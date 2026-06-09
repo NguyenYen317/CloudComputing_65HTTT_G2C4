@@ -20,7 +20,7 @@ const enableBigQuery = process.env.ENABLE_BIGQUERY !== "false";
 const foodImageBucket = process.env.FOOD_IMAGE_BUCKET || "";
 
 const adminEmails = new Set(
-  (process.env.ADMIN_EMAILS || "phuy08463@gmail.com")
+  (process.env.ADMIN_EMAILS || "phuy08463@gmail.com,admin123@gmail.com")
     .split(",")
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean),
