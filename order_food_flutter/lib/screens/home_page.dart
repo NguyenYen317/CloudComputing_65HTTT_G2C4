@@ -124,6 +124,7 @@ const orderStatusLabels = {
   'confirmed': 'Đã xác nhận',
   'preparing': 'Đang chuẩn bị',
   'waiting_shipper': 'Chờ shipper lấy hàng',
+  'assigned_shipper': 'Shipper đã nhận đơn',
   'delivering': 'Đang giao',
   'completed': 'Giao thành công',
   'cancelled': 'Đã hủy',
@@ -152,6 +153,8 @@ Color orderStatusColor(String status) {
       return Colors.grey.shade600;
     case 'delivering':
       return Colors.blue.shade700;
+    case 'assigned_shipper':
+      return Colors.indigo.shade700;
     default:
       return AppColors.primary;
   }

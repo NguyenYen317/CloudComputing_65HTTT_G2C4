@@ -9,6 +9,7 @@ const adminRoutes = require("./routes/admin.routes");
 const uploadRoutes = require("./routes/upload.routes");
 const bigqueryRoutes = require("./routes/bigquery.routes");
 const mlRoutes = require("./routes/ml.routes");
+const shipperRoutes = require("./routes/shipper.routes");
 const errorMiddleware = require("./middlewares/error.middleware");
 
 const app = express();
@@ -24,6 +25,7 @@ app.use("/admin", adminRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/bigquery", bigqueryRoutes);
 app.use("/ml", mlRoutes);
+app.use("/shipper", shipperRoutes);
 app.use(errorMiddleware);
 
 module.exports = app;

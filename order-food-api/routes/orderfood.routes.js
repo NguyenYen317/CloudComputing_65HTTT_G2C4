@@ -8,6 +8,7 @@ const adminRoutes = require("./admin.routes");
 const uploadRoutes = require("./upload.routes");
 const bigqueryRoutes = require("./bigquery.routes");
 const mlRoutes = require("./ml.routes");
+const shipperRoutes = require("./shipper.routes");
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use("/admin", adminRoutes);
 router.use("/upload", uploadRoutes);
 router.use("/bigquery", bigqueryRoutes);
 router.use("/ml", mlRoutes);
+router.use("/shipper", shipperRoutes);
 
 module.exports = router;

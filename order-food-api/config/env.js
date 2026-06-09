@@ -26,6 +26,13 @@ const adminEmails = new Set(
     .filter(Boolean),
 );
 
+const shipperEmails = new Set(
+  (process.env.SHIPPER_EMAILS || "shipperdemo@gmail.com")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean),
+);
+
 module.exports = {
   PORT,
   pythonBin,
@@ -39,4 +46,5 @@ module.exports = {
   enableBigQuery,
   foodImageBucket,
   adminEmails,
+  shipperEmails,
 };

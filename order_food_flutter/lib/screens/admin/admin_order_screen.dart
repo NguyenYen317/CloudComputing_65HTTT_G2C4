@@ -54,21 +54,7 @@ extension AdminOrderScreenBuilder on _HomePageState {
         actions.add((label: 'Đã hủy', status: 'cancelled', icon: Icons.cancel));
         break;
       case 'waiting_shipper':
-        // Demo only: later this should be updated by a delivery partner API/webhook.
-        actions.add((
-          label: 'Đang giao',
-          status: 'delivering',
-          icon: Icons.local_shipping_outlined,
-        ));
         actions.add((label: 'Đã hủy', status: 'cancelled', icon: Icons.cancel));
-        break;
-      case 'delivering':
-        // Demo only: later this should be updated by a delivery partner API/webhook.
-        actions.add((
-          label: 'Giao thành công',
-          status: 'completed',
-          icon: Icons.task_alt,
-        ));
         break;
       default:
         break;

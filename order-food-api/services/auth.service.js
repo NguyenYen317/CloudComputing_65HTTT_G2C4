@@ -1,6 +1,7 @@
 const userRepository = require("../repositories/user.repository");
 const cartRepository = require("../repositories/cart.repository");
-const { adminEmails } = require("../config/env");
+const { adminEmails, shipperEmails } = require("../config/env");
+const ROLES = require("../constants/roles");
 const httpError = require("../utils/httpError");
 
 function normalizeEmail(email) {
@@ -9,6 +10,11 @@ function normalizeEmail(email) {
 
 function publicUser(user) {
   const normalizedEmail = normalizeEmail(user.email);
+  const role = adminEmails.has(normalizedEmail)
+    ? ROLES.ADMIN
+    : shipperEmails.has(normalizedEmail)
+      ? ROLES.SHIPPER
+      : user.role || ROLES.CUSTOMER;
 
   return {
     id: user.id,
@@ -16,7 +22,7 @@ function publicUser(user) {
     email: normalizedEmail,
     provider: user.provider,
     avatar: user.avatar || "",
-    role: adminEmails.has(normalizedEmail) ? "admin" : user.role || "customer",
+    role,
   };
 }
 
@@ -33,7 +39,11 @@ async function saveUser(user) {
   const data = {
     ...user,
     email: normalizedEmail,
-    role: adminEmails.has(normalizedEmail) ? "admin" : user.role || "customer",
+    role: adminEmails.has(normalizedEmail)
+      ? ROLES.ADMIN
+      : shipperEmails.has(normalizedEmail)
+        ? ROLES.SHIPPER
+        : user.role || ROLES.CUSTOMER,
   };
 
   return userRepository.save(data);
@@ -61,7 +71,11 @@ async function register({ name, email, password }) {
     password: String(password),
     provider: "email",
     avatar: "",
-    role: adminEmails.has(normalizedEmail) ? "admin" : "customer",
+    role: adminEmails.has(normalizedEmail)
+      ? ROLES.ADMIN
+      : shipperEmails.has(normalizedEmail)
+        ? ROLES.SHIPPER
+        : ROLES.CUSTOMER,
     createdAt: new Date().toISOString(),
   });
 
@@ -85,7 +99,7 @@ async function login({ email, password }) {
       password: normalizedPassword,
       provider: "email",
       avatar: "",
-      role: adminEmails.has(normalizedEmail) ? "admin" : "customer",
+      role: adminEmails.has(normalizedEmail) ? ROLES.ADMIN : ROLES.CUSTOMER,
       createdAt: new Date().toISOString(),
     });
   }
@@ -98,7 +112,7 @@ async function login({ email, password }) {
       password: normalizedPassword,
       provider: "email",
       avatar: "",
-      role: "admin",
+      role: ROLES.ADMIN,
       createdAt: new Date().toISOString(),
     });
   }
@@ -107,7 +121,30 @@ async function login({ email, password }) {
     user = await saveUser({
       ...user,
       password: normalizedPassword,
-      role: "admin",
+      role: ROLES.ADMIN,
+    });
+  }
+
+  if (!user && normalizedEmail === "shipperdemo@gmail.com" && normalizedPassword === "shipper123") {
+    user = await saveUser({
+      id: "shipper_001",
+      name: "Shipper Demo",
+      email: normalizedEmail,
+      password: normalizedPassword,
+      provider: "email",
+      avatar: "",
+      role: ROLES.SHIPPER,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  if (user && normalizedEmail === "shipperdemo@gmail.com" && normalizedPassword === "shipper123") {
+    user = await saveUser({
+      ...user,
+      id: user.id || "shipper_001",
+      name: user.name || "Shipper Demo",
+      password: normalizedPassword,
+      role: ROLES.SHIPPER,
     });
   }
 
@@ -138,7 +175,11 @@ async function googleLogin({ email, name, avatar, idToken }) {
       password: "",
       provider: "google",
       avatar: avatar || "",
-      role: adminEmails.has(normalizedEmail) ? "admin" : "customer",
+      role: adminEmails.has(normalizedEmail)
+        ? ROLES.ADMIN
+        : shipperEmails.has(normalizedEmail)
+          ? ROLES.SHIPPER
+          : ROLES.CUSTOMER,
       createdAt: new Date().toISOString(),
     };
   } else {
@@ -147,7 +188,11 @@ async function googleLogin({ email, name, avatar, idToken }) {
       name: String(name || user.name || "Google User").trim(),
       provider: "google",
       avatar: avatar || user.avatar || "",
-      role: adminEmails.has(normalizedEmail) ? "admin" : user.role || "customer",
+      role: adminEmails.has(normalizedEmail)
+        ? ROLES.ADMIN
+        : shipperEmails.has(normalizedEmail)
+          ? ROLES.SHIPPER
+          : user.role || ROLES.CUSTOMER,
     };
   }
 
@@ -189,7 +234,7 @@ async function removeUser(email) {
     throw httpError(404, "Không tìm thấy tài khoản");
   }
 
-  if ((user.role || "customer") === "admin" || adminEmails.has(normalizedEmail)) {
+  if ((user.role || ROLES.CUSTOMER) === ROLES.ADMIN || adminEmails.has(normalizedEmail)) {
     throw httpError(403, "Không thể xóa tài khoản admin");
   }
 
