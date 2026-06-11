@@ -17,6 +17,7 @@ class ApiEndpoints {
   static const adminOrders = '/admin/orders';
   static const adminMlPredictions = '/admin/ml-predictions';
   static const adminBigQueryEvents = '/admin/bigquery-events';
+  static const saveFcmToken = '/notifications/save-token';
 
   static Uri uri(String path) => Uri.parse('${Environment.apiBaseUrl}$path');
 }

@@ -18,6 +18,15 @@ const bigQueryLocation = process.env.BIGQUERY_LOCATION || "asia-southeast1";
 const enableBigQuery = process.env.ENABLE_BIGQUERY !== "false";
 
 const foodImageBucket = process.env.FOOD_IMAGE_BUCKET || "";
+const enablePubSub = process.env.ENABLE_PUBSUB !== "false";
+const pubSubOrderEventsTopic =
+  process.env.PUBSUB_ORDER_EVENTS_TOPIC || "order-events-topic";
+const serviceName = process.env.SERVICE_NAME || "orderfood-api";
+const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
+const defaultStoreLat = Number(process.env.STORE_LAT || 21.028511);
+const defaultStoreLng = Number(process.env.STORE_LNG || 105.804817);
+const defaultStoreAddress =
+  process.env.STORE_ADDRESS || "Ha Noi, Viet Nam";
 
 const adminEmails = new Set(
   (process.env.ADMIN_EMAILS || "phuy08463@gmail.com,admin123@gmail.com")
@@ -27,7 +36,7 @@ const adminEmails = new Set(
 );
 
 const shipperEmails = new Set(
-  (process.env.SHIPPER_EMAILS || "shipperdemo@gmail.com")
+  (process.env.SHIPPER_EMAILS || "deli123@gmail.com")
     .split(",")
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean),
@@ -45,6 +54,13 @@ module.exports = {
   bigQueryLocation,
   enableBigQuery,
   foodImageBucket,
+  enablePubSub,
+  pubSubOrderEventsTopic,
+  serviceName,
+  googleMapsApiKey,
+  defaultStoreLat,
+  defaultStoreLng,
+  defaultStoreAddress,
   adminEmails,
   shipperEmails,
 };

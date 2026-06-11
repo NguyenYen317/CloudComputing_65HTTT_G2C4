@@ -12,6 +12,13 @@ class DeliveryOrderModel {
     this.note = '',
     this.createdAt = '',
     this.updatedAt = '',
+    this.customerAddress = '',
+    this.customerLat,
+    this.customerLng,
+    this.storeAddress = '',
+    this.storeLat,
+    this.storeLng,
+    this.mapsDirectionsUrl = '',
   });
 
   final String orderId;
@@ -26,8 +33,25 @@ class DeliveryOrderModel {
   final String note;
   final String createdAt;
   final String updatedAt;
+  final String customerAddress;
+  final double? customerLat;
+  final double? customerLng;
+  final String storeAddress;
+  final double? storeLat;
+  final double? storeLng;
+  final String mapsDirectionsUrl;
+
+  String get customerAddressOrAddress =>
+      customerAddress.trim().isNotEmpty ? customerAddress : address;
 
   factory DeliveryOrderModel.fromJson(Map<String, dynamic> data) {
+    final address =
+        (data['customerAddress'] ??
+                data['address'] ??
+                data['shippingAddress'] ??
+                '')
+            .toString();
+
     return DeliveryOrderModel(
       orderId: (data['id'] ?? data['orderId'] ?? data['code'] ?? '').toString(),
       userId: (data['userId'] ?? '').toString(),
@@ -40,13 +64,20 @@ class DeliveryOrderModel {
               .toString(),
       userEmail: (data['userEmail'] ?? data['email'] ?? '').toString(),
       phone: (data['phone'] ?? data['customerPhone'] ?? '').toString(),
-      address: (data['address'] ?? data['shippingAddress'] ?? '').toString(),
+      address: address,
       status: (data['status'] ?? 'waiting_shipper').toString(),
       totalAmount: NumberParser.toInt(data['totalAmount'] ?? data['total']),
       items: List<dynamic>.from(data['items'] as List? ?? const []),
       note: (data['note'] ?? data['notes'] ?? '').toString(),
       createdAt: (data['createdAt'] ?? '').toString(),
       updatedAt: (data['updatedAt'] ?? '').toString(),
+      customerAddress: address,
+      customerLat: NumberParser.toDouble(data['customerLat']),
+      customerLng: NumberParser.toDouble(data['customerLng']),
+      storeAddress: (data['storeAddress'] ?? '').toString(),
+      storeLat: NumberParser.toDouble(data['storeLat']),
+      storeLng: NumberParser.toDouble(data['storeLng']),
+      mapsDirectionsUrl: (data['mapsDirectionsUrl'] ?? '').toString(),
     );
   }
 
@@ -72,5 +103,12 @@ class NumberParser {
     if (value is int) return value;
     if (value is num) return value.round();
     return int.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  static double? toDouble(Object? value) {
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is num) return value.toDouble();
+    return double.tryParse(value?.toString() ?? '');
   }
 }

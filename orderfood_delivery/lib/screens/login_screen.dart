@@ -117,12 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         : const Icon(Icons.login),
                     label: const Text('Đăng nhập'),
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Tài khoản demo: shipperdemo@gmail.com / shipper123',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
                 ],
               ),
             ),

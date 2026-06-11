@@ -6,6 +6,9 @@ const {
   publicOrder,
   canTransitionOrder,
 } = require("../utils/orderHelpers");
+const PUBSUB_EVENT_TYPES = require("../constants/pubsubEventTypes");
+const pubSubService = require("./pubsub.service");
+const notificationService = require("./notification.service");
 
 function sortOrdersDesc(orders) {
   return orders.sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
@@ -63,6 +66,8 @@ async function createOrder(body) {
 
   await saveOrder(order);
   await bigQueryService.writeOrderEvent("created", order);
+  await pubSubService.publishOrderEvent(PUBSUB_EVENT_TYPES.ORDER_CREATED, order);
+  await notificationService.sendOrderStatusNotification(order);
 
   return {
     message: "Đặt món thành công",
@@ -101,6 +106,10 @@ async function updateOrderStatus(orderId, nextStatus) {
 
   await saveOrder(updated);
   await bigQueryService.writeOrderEvent("status_updated", updated);
+  await pubSubService.publishOrderEvent(PUBSUB_EVENT_TYPES.ORDER_STATUS_UPDATED, updated, {
+    previousStatus: currentStatus,
+  });
+  await notificationService.sendOrderStatusNotification(updated);
 
   return {
     message: "Cập nhật trạng thái đơn hàng thành công",
@@ -130,6 +139,10 @@ async function cancelOrder(orderId) {
 
   await saveOrder(updated);
   await bigQueryService.writeOrderEvent("cancelled", updated);
+  await pubSubService.publishOrderEvent(PUBSUB_EVENT_TYPES.ORDER_CANCELLED, updated, {
+    previousStatus: currentStatus,
+  });
+  await notificationService.sendOrderStatusNotification(updated);
 
   return {
     message: "Đã hủy đơn hàng",
@@ -147,6 +160,7 @@ async function deleteOrder(orderId) {
 
   await orderRepository.remove(orderId);
   await bigQueryService.writeOrderEvent("deleted", order);
+  await pubSubService.publishOrderEvent(PUBSUB_EVENT_TYPES.ORDER_DELETED, order);
 
   return {
     message: "Đã xóa đơn hàng",

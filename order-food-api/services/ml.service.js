@@ -5,6 +5,8 @@ const runPython = require("../utils/runPython");
 const httpError = require("../utils/httpError");
 const { predictionsPath, runtimeOrdersPath } = require("../config/env");
 const { normalizeOrderStatus } = require("../utils/orderHelpers");
+const pubSubService = require("./pubsub.service");
+const PUBSUB_EVENT_TYPES = require("../constants/pubsubEventTypes");
 
 function readPredictions() {
   return JSON.parse(fs.readFileSync(predictionsPath, "utf8"));
@@ -109,12 +111,20 @@ async function trainModel() {
   await runPython("train_model.py");
   await runPython("predict.py");
   const data = await predictionRepository.saveLatest(readPredictions());
+  await pubSubService.publishEvent(PUBSUB_EVENT_TYPES.ML_PREDICTION_UPDATED, {
+    rows,
+    updatedAt: data.updatedAt || new Date().toISOString(),
+  });
   return { rows, data };
 }
 
 async function updatePredictions() {
   await runPython("predict.py");
-  return predictionRepository.saveLatest(readPredictions());
+  const data = await predictionRepository.saveLatest(readPredictions());
+  await pubSubService.publishEvent(PUBSUB_EVENT_TYPES.ML_PREDICTION_UPDATED, {
+    updatedAt: data.updatedAt || new Date().toISOString(),
+  });
+  return data;
 }
 
 async function updatePredictionsWithFallback() {

@@ -17,6 +17,14 @@ async function getMyDeliveryOrders(req, res) {
   }
 }
 
+async function getDeliveryOrderDetail(req, res) {
+  try {
+    res.json(await shipperService.getDeliveryOrderDetail(req.params.orderId));
+  } catch (error) {
+    handleControllerError(res, error);
+  }
+}
+
 async function acceptOrder(req, res) {
   try {
     res.json(await shipperService.acceptOrder(req.params.orderId, req.body));
@@ -44,6 +52,7 @@ async function completeOrder(req, res) {
 module.exports = {
   getAvailableOrders,
   getMyDeliveryOrders,
+  getDeliveryOrderDetail,
   acceptOrder,
   startDelivering,
   completeOrder,

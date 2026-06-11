@@ -125,10 +125,10 @@ async function login({ email, password }) {
     });
   }
 
-  if (!user && normalizedEmail === "shipperdemo@gmail.com" && normalizedPassword === "shipper123") {
+  if (!user && normalizedEmail === "deli123@gmail.com" && normalizedPassword === "deli123") {
     user = await saveUser({
       id: "shipper_001",
-      name: "Shipper Demo",
+      name: "Delivery Shipper",
       email: normalizedEmail,
       password: normalizedPassword,
       provider: "email",
@@ -138,11 +138,11 @@ async function login({ email, password }) {
     });
   }
 
-  if (user && normalizedEmail === "shipperdemo@gmail.com" && normalizedPassword === "shipper123") {
+  if (user && normalizedEmail === "deli123@gmail.com" && normalizedPassword === "deli123") {
     user = await saveUser({
       ...user,
       id: user.id || "shipper_001",
-      name: user.name || "Shipper Demo",
+      name: user.name || "Delivery Shipper",
       password: normalizedPassword,
       role: ROLES.SHIPPER,
     });

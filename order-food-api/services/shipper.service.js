@@ -2,8 +2,12 @@ const ORDER_STATUS = require("../constants/orderStatus").ORDER_STATUS;
 const EVENT_TYPES = require("../constants/eventTypes");
 const orderRepository = require("../repositories/order.repository");
 const bigQueryService = require("./bigquery.service");
+const pubSubService = require("./pubsub.service");
+const notificationService = require("./notification.service");
+const mapsService = require("./maps.service");
 const httpError = require("../utils/httpError");
 const { normalizeOrderStatus, publicOrder } = require("../utils/orderHelpers");
+const PUBSUB_EVENT_TYPES = require("../constants/pubsubEventTypes");
 
 function sortOrdersDesc(orders) {
   return orders.sort((a, b) =>
@@ -39,9 +43,16 @@ async function findOrderOrThrow(orderId) {
 
 async function listAvailableOrders() {
   const orders = await orderRepository.list(500);
-  return sortOrdersDesc(
+  const filtered = sortOrdersDesc(
     orders.filter((order) => normalizeOrderStatus(order) === ORDER_STATUS.WAITING_SHIPPER),
-  ).map(publicOrder);
+  );
+
+  return Promise.all(
+    filtered.map(async (order) => {
+      const result = await mapsService.enrichOrderWithMapData(publicOrder(order));
+      return result.order;
+    }),
+  );
 }
 
 async function listMyDeliveryOrders(shipperId) {
@@ -51,9 +62,38 @@ async function listMyDeliveryOrders(shipperId) {
   }
 
   const orders = await orderRepository.list(500);
-  return sortOrdersDesc(
+  const filtered = sortOrdersDesc(
     orders.filter((order) => String(order.shipperId || "") === normalizedShipperId),
-  ).map(publicOrder);
+  );
+
+  return Promise.all(
+    filtered.map(async (order) => {
+      const result = await mapsService.enrichOrderWithMapData(publicOrder(order));
+      return result.order;
+    }),
+  );
+}
+
+async function getDeliveryOrderDetail(orderId) {
+  const order = await findOrderOrThrow(orderId);
+  const result = await mapsService.enrichOrderWithMapData(publicOrder(order), {
+    geocodeMissing: true,
+  });
+
+  if (result.geocoded) {
+    await orderRepository.save({
+      ...order,
+      customerAddress: result.order.customerAddress,
+      customerLat: result.order.customerLat,
+      customerLng: result.order.customerLng,
+      storeAddress: result.order.storeAddress,
+      storeLat: result.order.storeLat,
+      storeLng: result.order.storeLng,
+      updatedAt: order.updatedAt || new Date().toISOString(),
+    });
+  }
+
+  return result.order;
 }
 
 async function acceptOrder(orderId, body) {
@@ -78,6 +118,10 @@ async function acceptOrder(orderId, body) {
 
   await orderRepository.save(updated);
   await bigQueryService.writeOrderEvent(EVENT_TYPES.SHIPPER_ASSIGNED, updated);
+  await pubSubService.publishOrderEvent(PUBSUB_EVENT_TYPES.SHIPPER_ACCEPTED_ORDER, updated, {
+    previousStatus: status,
+  });
+  await notificationService.sendOrderStatusNotification(updated);
 
   return {
     message: "Nhận đơn thành công",
@@ -109,6 +153,10 @@ async function startDelivering(orderId, body) {
 
   await orderRepository.save(updated);
   await bigQueryService.writeOrderEvent(EVENT_TYPES.SHIPPER_DELIVERING, updated);
+  await pubSubService.publishOrderEvent(PUBSUB_EVENT_TYPES.SHIPPER_STARTED_DELIVERY, updated, {
+    previousStatus: status,
+  });
+  await notificationService.sendOrderStatusNotification(updated);
 
   return {
     message: "Bắt đầu giao đơn thành công",
@@ -140,6 +188,10 @@ async function completeOrder(orderId, body) {
 
   await orderRepository.save(updated);
   await bigQueryService.writeOrderEvent(EVENT_TYPES.SHIPPER_COMPLETED, updated);
+  await pubSubService.publishOrderEvent(PUBSUB_EVENT_TYPES.SHIPPER_COMPLETED_DELIVERY, updated, {
+    previousStatus: status,
+  });
+  await notificationService.sendOrderStatusNotification(updated);
 
   return {
     message: "Giao đơn thành công",
@@ -150,6 +202,7 @@ async function completeOrder(orderId, body) {
 module.exports = {
   listAvailableOrders,
   listMyDeliveryOrders,
+  getDeliveryOrderDetail,
   acceptOrder,
   startDelivering,
   completeOrder,

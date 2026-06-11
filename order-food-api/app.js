@@ -10,12 +10,18 @@ const uploadRoutes = require("./routes/upload.routes");
 const bigqueryRoutes = require("./routes/bigquery.routes");
 const mlRoutes = require("./routes/ml.routes");
 const shipperRoutes = require("./routes/shipper.routes");
+const notificationRoutes = require("./routes/notification.routes");
+const mapsRoutes = require("./routes/maps.routes");
+const healthRoutes = require("./routes/health.routes");
+const requestLogger = require("./middlewares/requestLogger.middleware");
 const errorMiddleware = require("./middlewares/error.middleware");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: "12mb" }));
+app.use(requestLogger);
+app.use(healthRoutes);
 app.use(legacyRoutes);
 app.use("/auth", authRoutes);
 app.use("/foods", foodRoutes);
@@ -26,6 +32,8 @@ app.use("/upload", uploadRoutes);
 app.use("/bigquery", bigqueryRoutes);
 app.use("/ml", mlRoutes);
 app.use("/shipper", shipperRoutes);
+app.use("/notifications", notificationRoutes);
+app.use("/maps", mapsRoutes);
 app.use(errorMiddleware);
 
 module.exports = app;

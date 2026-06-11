@@ -23,6 +23,15 @@ class ShipperService {
     return _ordersFromResponse(response);
   }
 
+  Future<DeliveryOrderModel> getOrderDetail(String orderId) async {
+    final response = await http.get(
+      ApiService.uri('/shipper/orders/detail/$orderId'),
+    );
+    ApiService.ensureSuccess(response);
+    final data = Map<String, dynamic>.from(ApiService.decode(response) as Map);
+    return DeliveryOrderModel.fromJson(data);
+  }
+
   Future<DeliveryOrderModel> acceptOrder({
     required String orderId,
     required ShipperUser shipper,

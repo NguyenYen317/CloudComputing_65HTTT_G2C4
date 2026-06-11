@@ -9,10 +9,14 @@ const uploadRoutes = require("./upload.routes");
 const bigqueryRoutes = require("./bigquery.routes");
 const mlRoutes = require("./ml.routes");
 const shipperRoutes = require("./shipper.routes");
+const notificationRoutes = require("./notification.routes");
+const healthRoutes = require("./health.routes");
+const mapsRoutes = require("./maps.routes");
 
 const router = express.Router();
 
 router.use(legacyRoutes);
+router.use(healthRoutes);
 router.use("/auth", authRoutes);
 router.use("/foods", foodRoutes);
 router.use("/cart", cartRoutes);
@@ -22,5 +26,7 @@ router.use("/upload", uploadRoutes);
 router.use("/bigquery", bigqueryRoutes);
 router.use("/ml", mlRoutes);
 router.use("/shipper", shipperRoutes);
+router.use("/notifications", notificationRoutes);
+router.use("/maps", mapsRoutes);
 
 module.exports = router;
