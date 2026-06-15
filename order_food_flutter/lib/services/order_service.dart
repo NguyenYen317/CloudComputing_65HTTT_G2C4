@@ -38,11 +38,17 @@ extension OrderServiceMethods on _HomePageState {
       return;
     }
 
-    final address = _addressController.text.trim();
-    if (address.isEmpty) {
-      showMessage('Vui lòng nhập địa chỉ giao hàng');
+    final street = _addressController.text.trim();
+    if (street.isEmpty) {
+      showMessage('Vui lòng nhập số nhà và tên đường');
       return;
     }
+
+    final address = buildHanoiDeliveryAddress(
+      street: street,
+      ward: selectedDeliveryWard,
+      district: selectedDeliveryDistrict,
+    );
 
     final payload = {
       'userId': userKey,
@@ -62,6 +68,10 @@ extension OrderServiceMethods on _HomePageState {
       'voucherDiscount': voucherDiscount,
       'total': totalPrice,
       'address': address,
+      'street': street,
+      'ward': selectedDeliveryWard,
+      'district': selectedDeliveryDistrict,
+      'city': 'Hà Nội',
       'note': _noteController.text.trim(),
     };
 
@@ -105,6 +115,7 @@ extension OrderServiceMethods on _HomePageState {
             ),
       );
       cart.clear();
+      _addressController.clear();
       _noteController.clear();
       tabIndex = 2;
     });

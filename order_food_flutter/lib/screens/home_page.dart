@@ -9,9 +9,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _searchController = TextEditingController();
-  final _addressController = TextEditingController(
-    text: AppConstants.defaultAddress,
-  );
+  final _addressController = TextEditingController();
   final _noteController = TextEditingController();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -36,6 +34,8 @@ class _HomePageState extends State<HomePage> {
   String? mlError;
   String? storedCartRaw;
   String selectedCategory = 'Tất cả';
+  String selectedDeliveryDistrict = defaultHanoiDistrict;
+  String selectedDeliveryWard = defaultHanoiWard;
   String query = '';
   int tabIndex = 0;
   int adminTabIndex = 0;
