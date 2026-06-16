@@ -150,6 +150,7 @@ Hệ thống sử dụng:
 - Firebase Cloud Messaging.
 - Cloud Monitoring / Cloud Logging.
 - Google Maps Platform.
+- Google Secret Manager.
 - Cloud Build.
 - Artifact Registry.
 - IAM / Service Account.
@@ -262,11 +263,17 @@ Vai trò:
 
 Cloud Build dùng để build Docker image của backend. Artifact Registry dùng để lưu image trước khi deploy lên Cloud Run.
 
-### 6.13. IAM / Service Account
+### 6.13. Google Secret Manager
+
+Google Secret Manager được bổ sung để quản lý các thông tin nhạy cảm của backend như Google Maps API Key, Firebase Admin credentials, Cloud Storage bucket, Pub/Sub topic, JWT secret và các secret mở rộng khác.
+
+Việc sử dụng Secret Manager giúp backend không cần hardcode secret trong source code, giảm nguy cơ lộ key khi đẩy code lên GitHub và phù hợp hơn với mô hình triển khai backend trên Cloud Run.
+
+### 6.14. IAM / Service Account
 
 IAM được dùng để cấp quyền cho Cloud Run truy cập các dịch vụ như Datastore, BigQuery, Storage và Pub/Sub.
 
-### 6.14. Zoho SalesIQ
+### 6.15. Zoho SalesIQ
 
 Zoho SalesIQ được tích hợp dạng widget script trong frontend để hỗ trợ chat/hỗ trợ khách hàng.
 

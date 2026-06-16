@@ -12,6 +12,7 @@
 # 12. Cloud Build
 # 13. Artifact Registry
 # 14. IAM / Service Account
-# 15. Zoho SalesIQ
-# 16. Machine Learning - python (randomforest)
-# 17. Domain 
+# 15. Google Secret Manager
+# 16. Zoho SalesIQ
+# 17. Machine Learning - python (randomforest)
+# 18. Domain 

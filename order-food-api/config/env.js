@@ -11,16 +11,24 @@ const runtimeOrdersPath = path.join(mlDir, "orders_runtime.csv");
 const foodModelPath = path.join(mlDir, "model_food.pkl");
 const revenueModelPath = path.join(mlDir, "model_revenue.pkl");
 
-const bigQueryDatasetId = process.env.BIGQUERY_DATASET || "orderfood_analytics";
+const bigQueryDatasetId =
+  process.env.BIGQUERY_DATASET ||
+  process.env.BIGQUERY_DATASET_ID ||
+  "orderfood_analytics";
 const bigQueryOrderEventsTableId =
-  process.env.BIGQUERY_ORDER_EVENTS_TABLE || "order_events";
+  process.env.BIGQUERY_ORDER_EVENTS_TABLE ||
+  process.env.BIGQUERY_TABLE_ID ||
+  "order_events";
 const bigQueryLocation = process.env.BIGQUERY_LOCATION || "asia-southeast1";
 const enableBigQuery = process.env.ENABLE_BIGQUERY !== "false";
 
-const foodImageBucket = process.env.FOOD_IMAGE_BUCKET || "";
+const foodImageBucket =
+  process.env.FOOD_IMAGE_BUCKET || process.env.CLOUD_STORAGE_BUCKET || "";
 const enablePubSub = process.env.ENABLE_PUBSUB !== "false";
 const pubSubOrderEventsTopic =
-  process.env.PUBSUB_ORDER_EVENTS_TOPIC || "order-events-topic";
+  process.env.PUBSUB_ORDER_EVENTS_TOPIC ||
+  process.env.PUBSUB_ORDER_TOPIC ||
+  "order-events-topic";
 const serviceName = process.env.SERVICE_NAME || "orderfood-api";
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 const defaultStoreLat = Number(process.env.STORE_LAT || 21.028511);

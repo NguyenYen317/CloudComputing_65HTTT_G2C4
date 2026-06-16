@@ -17,6 +17,7 @@
     "@google-cloud/bigquery": "^8.1.1",
     "@google-cloud/datastore": "^9.1.0",
     "@google-cloud/pubsub": "^5.2.0",
+    "@google-cloud/secret-manager": "^6.1.0",
     "@google-cloud/storage": "^7.17.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
