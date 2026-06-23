@@ -8,10 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-// Web-only imports required by FeedbackPage (iframe approach)
-import 'dart:html' as html;
 import 'dart:ui_web' as ui;
-// webview_flutter removed for web-only iframe implementation
+import 'package:web/web.dart' as web;
 
 import 'core/core.dart';
 import 'firebase_options.dart';

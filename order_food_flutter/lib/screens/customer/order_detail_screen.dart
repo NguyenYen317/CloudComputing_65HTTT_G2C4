@@ -55,7 +55,8 @@ extension OrderDetailScreenBuilder on _HomePageState {
             style: TextStyle(color: Colors.grey.shade600),
           ),
           const SizedBox(height: 8),
-          if (order.status == OrderStatusModel.completed &&
+          if (normalizeOrderStatus(order.status) ==
+                  OrderStatusModel.completed &&
               !ratedOrders.contains(order.code)) ...[
             OutlinedButton.icon(
               onPressed: () {

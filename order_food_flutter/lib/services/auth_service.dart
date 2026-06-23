@@ -26,6 +26,7 @@ extension AuthServiceMethods on _HomePageState {
     if (userRaw != null) {
       try {
         setState(() => currentUser = AppUser.fromJson(jsonDecode(userRaw)));
+        await loadRatedOrders();
         if (currentUser?.role == 'admin') {
           await fetchAdminData();
         } else {
@@ -37,10 +38,6 @@ extension AuthServiceMethods on _HomePageState {
         await prefs.remove('authToken');
       }
     }
-
-    // load rated orders
-    final rated = prefs.getStringList('ratedOrders') ?? [];
-    setState(() => ratedOrders.addAll(rated));
 
     restoreCartFromStorage();
   }
@@ -98,6 +95,7 @@ extension AuthServiceMethods on _HomePageState {
           authToken = (data['token'] ?? '').toString();
         });
         await saveSession();
+        await loadRatedOrders();
         if (currentUser?.role == 'admin') {
           await fetchAdminData();
         } else {
@@ -174,6 +172,7 @@ extension AuthServiceMethods on _HomePageState {
           authToken = (data['token'] ?? '').toString();
         });
         await saveSession();
+        await loadRatedOrders();
         showMessage('Đăng nhập Google thành công');
       } else {
         showMessage(data['message']?.toString() ?? 'Đăng nhập Google thất bại');
@@ -223,6 +222,7 @@ extension AuthServiceMethods on _HomePageState {
         authToken = (data['token'] ?? '').toString();
       });
       await saveSession();
+      await loadRatedOrders();
       if (currentUser?.role == 'admin') {
         await fetchAdminData();
       } else {
@@ -245,6 +245,7 @@ extension AuthServiceMethods on _HomePageState {
       currentUser = null;
       authToken = null;
       tabIndex = 0;
+      ratedOrders.clear();
     });
   }
 }

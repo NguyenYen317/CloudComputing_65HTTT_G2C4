@@ -17,12 +17,15 @@ class FeedbackPage extends StatelessWidget {
         '&food_name=${Uri.encodeComponent(foodName)}'
         '&order_id=${Uri.encodeComponent(order.code)}';
 
-    final viewType = 'zoho-feedback-${order.code}-${user.id}';
+    final viewTypeKey = base64Url.encode(
+      utf8.encode('${order.code}-${user.email}-${user.id}'),
+    );
+    final viewType = 'zoho-feedback-$viewTypeKey';
 
     // register iframe view for this specific order/user; ignore if already registered
     try {
       ui.platformViewRegistry.registerViewFactory(viewType, (int viewId) {
-        final iframe = html.IFrameElement()
+        final iframe = web.HTMLIFrameElement()
           ..src = url
           ..style.border = 'none'
           ..style.width = '100%'

@@ -146,7 +146,8 @@ extension AdminFoodFormScreenBuilder on _HomePageState {
                     ? Uri.parse('$apiBaseUrl/admin/foods')
                     : Uri.parse('$apiBaseUrl/admin/foods/${food.id}');
                 final response = food == null
-                    ? await http.post(  // Add food: Nếu food là null, tức là đang tạo mới, thì dùng POST
+                    ? await http.post(
+                        // Add food: Nếu food là null, tức là đang tạo mới, thì dùng POST
                         uri,
                         headers: {
                           'Content-Type': 'application/json',
@@ -155,7 +156,8 @@ extension AdminFoodFormScreenBuilder on _HomePageState {
                         },
                         body: jsonEncode(body),
                       )
-                    : await http.patch(  // Edit food: Nếu food không null, tức là đang chỉnh sửa, thì dùng PATCH
+                    : await http.patch(
+                        // Edit food: Nếu food không null, tức là đang chỉnh sửa, thì dùng PATCH
                         uri,
                         headers: {
                           'Content-Type': 'application/json',
@@ -170,7 +172,7 @@ extension AdminFoodFormScreenBuilder on _HomePageState {
                       (food == null ? 'Đã thêm món' : 'Đã cập nhật món'),
                 );
                 if (context.mounted) {
-                  Navigator.pop( 
+                  Navigator.pop(
                     context,
                     response.statusCode >= 200 && response.statusCode < 300,
                   );

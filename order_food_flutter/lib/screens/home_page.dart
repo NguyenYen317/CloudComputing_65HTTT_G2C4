@@ -67,11 +67,27 @@ class _HomePageState extends State<HomePage> {
     ).showSnackBar(SnackBar(content: Text(message)));
   }
 
+  String get ratedOrdersStorageKey {
+    final userKey = syncUserKey ?? currentUser?.email.trim().toLowerCase();
+    return 'ratedOrders_${userKey == null || userKey.isEmpty ? 'guest' : userKey}';
+  }
+
+  Future<void> loadRatedOrders() async {
+    final prefs = await SharedPreferences.getInstance();
+    final rated = prefs.getStringList(ratedOrdersStorageKey) ?? const [];
+    if (!mounted) return;
+    setState(() {
+      ratedOrders
+        ..clear()
+        ..addAll(rated);
+    });
+  }
+
   Future<void> markOrderRated(String code) async {
     if (ratedOrders.contains(code)) return;
     ratedOrders.add(code);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('ratedOrders', ratedOrders.toList());
+    await prefs.setStringList(ratedOrdersStorageKey, ratedOrders.toList());
     if (mounted) setState(() {});
   }
 
