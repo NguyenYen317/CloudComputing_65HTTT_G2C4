@@ -1,5 +1,12 @@
-const { BigQuery } = require("@google-cloud/bigquery");
+let bigquery = null;
 
-const bigquery = new BigQuery();
+function getBigQuery() {
+  if (bigquery) return bigquery;
+  const { BigQuery } = require("@google-cloud/bigquery");
+  bigquery = new BigQuery();
+  return bigquery;
+}
 
-module.exports = bigquery;
+module.exports = {
+  getBigQuery,
+};

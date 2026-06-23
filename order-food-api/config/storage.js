@@ -1,5 +1,12 @@
-const { Storage } = require("@google-cloud/storage");
+let storage = null;
 
-const storage = new Storage();
+function getStorage() {
+  if (storage) return storage;
+  const { Storage } = require("@google-cloud/storage");
+  storage = new Storage();
+  return storage;
+}
 
-module.exports = storage;
+module.exports = {
+  getStorage,
+};

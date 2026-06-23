@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { loadSecretsIntoEnv } = require("./config/secretManager");
 
 async function startServer() {

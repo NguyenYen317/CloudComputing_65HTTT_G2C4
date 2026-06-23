@@ -1,21 +1,23 @@
-const datastore = require("../config/datastore");
+const { getDatastore } = require("../config/datastore");
 const COLLECTIONS = require("../constants/collections");
 
 function cartKey(userId) {
-  return datastore.key([COLLECTIONS.CARTS, String(userId || "").trim()]);
+  return getDatastore().key([COLLECTIONS.CARTS, String(userId || "").trim()]);
 }
 
 async function findByUserId(userId) {
-  const [cart] = await datastore.get(cartKey(userId));
+  const [cart] = await getDatastore().get(cartKey(userId));
   return cart || { userId, items: [], updatedAt: new Date().toISOString() };
 }
 
 async function save(cart) {
+  const datastore = getDatastore();
   await datastore.save({ key: cartKey(cart.userId), data: cart });
   return cart;
 }
 
 async function remove(userId) {
+  const datastore = getDatastore();
   await datastore.delete(cartKey(userId));
 }
 

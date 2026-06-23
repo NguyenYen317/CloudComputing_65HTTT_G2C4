@@ -1,4 +1,4 @@
-const bigquery = require("../config/bigquery");
+const { getBigQuery } = require("../config/bigquery");
 const predictionRepository = require("../repositories/prediction.repository");
 const {
   bigQueryLocation,
@@ -11,11 +11,23 @@ const {
   orderItemsForAnalytics,
 } = require("../utils/orderHelpers");
 
+function getBigQueryClient() {
+  if (!enableBigQuery) return null;
+  return getBigQuery();
+}
+
 function orderEventsTableRef() {
+  const bigquery = getBigQueryClient();
+  if (!bigquery) {
+    throw new Error("BigQuery is not enabled");
+  }
   return `\`${bigquery.projectId}.${bigQueryDatasetId}.${bigQueryOrderEventsTableId}\``;
 }
 
 async function ensureOrderEventsTable() {
+  const bigquery = getBigQueryClient();
+  if (!bigquery) return null;
+
   const dataset = bigquery.dataset(bigQueryDatasetId);
   const [datasetExists] = await dataset.exists();
   if (!datasetExists) {
@@ -76,6 +88,11 @@ async function writeOrderEvent(eventType, order) {
 }
 
 async function getAdminSummary() {
+  const bigquery = getBigQueryClient();
+  if (!bigquery) {
+    return { totalOrders: 0, cancelledOrders: 0, revenue: 0, ordersByStatus: [] };
+  }
+
   const [rows] = await bigquery.query({
     query: `
       WITH latest_orders AS (
@@ -105,6 +122,9 @@ async function getAdminSummary() {
 }
 
 async function listOrderEvents(limit = 100) {
+  const bigquery = getBigQueryClient();
+  if (!bigquery) return [];
+
   const normalizedLimit = Math.min(Number(limit || 100), 500);
   const [rows] = await bigquery.query({
     query: `
@@ -125,6 +145,9 @@ async function createOrderEvent(body) {
 }
 
 async function revenueSummary() {
+  const bigquery = getBigQueryClient();
+  if (!bigquery) return { revenue: 0, orderCount: 0 };
+
   const [rows] = await bigquery.query({
     query: `SELECT SUM(totalAmount) AS revenue, COUNT(DISTINCT orderId) AS orderCount FROM ${orderEventsTableRef()}`,
   });
@@ -138,7 +161,6 @@ async function bestSellingFoods() {
 }
 
 module.exports = {
-  bigquery,
   orderEventsTableRef,
   ensureOrderEventsTable,
   writeOrderEvent,
