@@ -48,7 +48,54 @@ extension AdminDashboardScreenBuilder on _HomePageState {
         if (mlLoading)
           const _AdminNotice(message: 'Đang tải dữ liệu Machine Learning...'),
         if (mlError != null) _AdminNotice(message: mlError!),
+
+        const ZohoDashboardFrame(
+          viewId: 'zoho-chart-top-foods', //
+          embedUrl: 'https://analytics.zoho.com/open-view/3238661000000009062',
+        ),
       ],
+    );
+  }
+}
+
+class ZohoDashboardFrame extends StatelessWidget {
+  final String viewId;
+  final String embedUrl;
+
+  const ZohoDashboardFrame({
+    Key? key,
+    required this.viewId,
+    required this.embedUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    ui_web.platformViewRegistry.registerViewFactory(
+      viewId,
+      (int id) => html.IFrameElement()
+        ..style.width = '100%'
+        ..style.height = '100%'
+        ..style.border = 'none'
+        ..setAttribute(
+          'sandbox',
+          'allow-scripts allow-same-origin allow-popups allow-forms',
+        )
+        ..src = embedUrl,
+    );
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 550,
+      margin: const EdgeInsets.only(top: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: HtmlElementView(viewType: viewId),
+      ),
     );
   }
 }

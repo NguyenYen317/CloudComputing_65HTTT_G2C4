@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'dart:html' as html;
+import 'dart:ui_web' as ui_web; // Chữ 'ui_web' là chuẩn mới của Flutter
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:file_picker/file_picker.dart';
