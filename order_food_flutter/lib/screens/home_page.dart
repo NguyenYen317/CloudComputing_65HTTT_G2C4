@@ -34,6 +34,8 @@ class _HomePageState extends State<HomePage> {
   String? bigQueryError;
   String? mlError;
   String? storedCartRaw;
+  String? fcmRegisteredUserId;
+  String? fcmRegistrationError;
   String selectedCategory = 'Tất cả';
   String selectedDeliveryDistrict = defaultHanoiDistrict;
   String selectedDeliveryWard = defaultHanoiWard;
@@ -44,6 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    const FcmService().listenToForegroundMessages(showMessage);
     loadLocalState();
     fetchFoods();
     initGoogleSignIn();

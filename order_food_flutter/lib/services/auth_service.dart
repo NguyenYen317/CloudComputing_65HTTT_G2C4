@@ -57,6 +57,31 @@ extension AuthServiceMethods on _HomePageState {
     await prefs.remove('authToken');
   }
 
+  Future<bool> registerFcmTokenForCurrentUser({bool force = false}) async {
+    final user = currentUser;
+    if (user == null || user.role != 'customer') return false;
+
+    final userId = user.email.trim().isNotEmpty ? user.email.trim() : user.id;
+    if (!force && fcmRegisteredUserId == userId) return true;
+
+    try {
+      fcmRegistrationError = null;
+      final token = await const FcmService().registerCurrentDevice(
+        userId: userId,
+      );
+      if (token != null) {
+        fcmRegisteredUserId = userId;
+        debugPrint('FCM token saved for $userId');
+        return true;
+      }
+    } catch (error) {
+      fcmRegistrationError = error.toString().replaceFirst('Exception: ', '');
+      debugPrint('FCM registration failed: $error');
+    }
+
+    return false;
+  }
+
   Future<void> submitEmailAuth() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
@@ -245,6 +270,7 @@ extension AuthServiceMethods on _HomePageState {
       currentUser = null;
       authToken = null;
       tabIndex = 0;
+      fcmRegisteredUserId = null;
       ratedOrders.clear();
     });
   }

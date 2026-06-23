@@ -24,10 +24,21 @@ function getFirebaseAdmin() {
     const admin = require("firebase-admin");
     if (!admin.apps.length) {
       const serviceAccount = parseFirebaseAdminConfig();
+      const firebaseProjectId =
+        process.env.FIREBASE_PROJECT_ID ||
+        serviceAccount?.project_id ||
+        process.env.GCLOUD_PROJECT ||
+        process.env.GOOGLE_CLOUD_PROJECT;
+
       admin.initializeApp(
         serviceAccount
-          ? { credential: admin.credential.cert(serviceAccount) }
-          : undefined,
+          ? {
+              credential: admin.credential.cert(serviceAccount),
+              projectId: firebaseProjectId,
+            }
+          : firebaseProjectId
+            ? { projectId: firebaseProjectId }
+            : undefined,
       );
     }
     firebaseAdmin = admin;

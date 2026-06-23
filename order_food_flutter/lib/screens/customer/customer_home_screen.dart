@@ -16,6 +16,11 @@ extension CustomerHomeScreenBuilder on _HomePageState {
             onPressed: loading ? null : refreshCustomerData,
             icon: const Icon(Icons.refresh),
           ),
+          IconButton(
+            tooltip: 'Bật thông báo',
+            onPressed: enableCustomerNotifications,
+            icon: const Icon(Icons.notifications_active_outlined),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: Center(child: Text(currentUser!.name)),
@@ -76,5 +81,16 @@ extension CustomerHomeScreenBuilder on _HomePageState {
     await fetchOrders();
     if (!mounted) return;
     showMessage('Đã tải lại dữ liệu');
+  }
+
+  Future<void> enableCustomerNotifications() async {
+    final saved = await registerFcmTokenForCurrentUser(force: true);
+    if (!mounted) return;
+    showMessage(
+      saved
+          ? 'Đã bật thông báo đơn hàng'
+          : (fcmRegistrationError ??
+                'Chưa bật được thông báo. Kiểm tra quyền Notification của Chrome.'),
+    );
   }
 }

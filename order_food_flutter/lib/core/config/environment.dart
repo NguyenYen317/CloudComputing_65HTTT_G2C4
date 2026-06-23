@@ -15,7 +15,13 @@ class Environment {
     'GOOGLE_SERVER_CLIENT_ID',
     defaultValue: '',
   );
+
+  static const fcmVapidKey = String.fromEnvironment(
+    'FCM_VAPID_KEY',
+    defaultValue: '',
+  );
 }
 
 const String googleClientId = Environment.googleClientId;
 const String googleServerClientId = Environment.googleServerClientId;
+const String fcmVapidKey = Environment.fcmVapidKey;

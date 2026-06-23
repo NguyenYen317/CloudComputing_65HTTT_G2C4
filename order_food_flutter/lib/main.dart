@@ -13,6 +13,7 @@ import 'package:web/web.dart' as web;
 
 import 'core/core.dart';
 import 'firebase_options.dart';
+import 'services/fcm_service.dart';
 
 part 'app.dart';
 part 'models/user_model.dart';
