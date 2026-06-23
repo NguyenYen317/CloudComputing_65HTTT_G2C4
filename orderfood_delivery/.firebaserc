@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "flutter-orderfood-1b333"
+  },
+  "targets": {
+    "flutter-orderfood-1b333": {
+      "hosting": {
+        "delivery": [
+          "orderfood-delivery-1b333"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -1,0 +1,26 @@
+{
+  "name": "order-food-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "ml:train": "python ml/train_model.py",
+    "ml:predict": "python ml/predict.py",
+    "ml": "npm run ml:train && npm run ml:predict"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/bigquery": "^8.1.1",
+    "@google-cloud/datastore": "^9.1.0",
+    "@google-cloud/pubsub": "^5.2.0",
+    "@google-cloud/secret-manager": "^6.1.0",
+    "@google-cloud/storage": "^7.17.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "firebase-admin": "^13.6.0"
+  }
+}

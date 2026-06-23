@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "flutter-orderfood-1b333",
+          "appId": "1:33969899605:android:11138e904a1316863e2cdc",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "flutter-orderfood-1b333",
+          "configurations": {
+            "android": "1:33969899605:android:11138e904a1316863e2cdc",
+            "ios": "1:33969899605:ios:b6125ae5a5dca6203e2cdc",
+            "macos": "1:33969899605:ios:b6125ae5a5dca6203e2cdc",
+            "web": "1:33969899605:web:5bd52f2bffa0052f3e2cdc",
+            "windows": "1:33969899605:web:9cb4b9a1d368400a3e2cdc"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "33969899605",
+    "project_id": "flutter-orderfood-1b333",
+    "storage_bucket": "flutter-orderfood-1b333.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33969899605:android:11138e904a1316863e2cdc",
+        "android_client_info": {
+          "package_name": "com.example.order_food_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33969899605-6j3h8gi297tef7i6jca9f8ooggo0la4q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyaFFapXbKXyeFX8fpv7FH-CCWDqGKQVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33969899605-6j3h8gi297tef7i6jca9f8ooggo0la4q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

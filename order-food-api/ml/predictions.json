@@ -1,0 +1,39 @@
+{
+  "bestSellingFoods": [
+    {
+      "foodName": "Fried Chicken",
+      "predictedQuantity": 50,
+      "level": "Cao"
+    },
+    {
+      "foodName": "Pizza",
+      "predictedQuantity": 49,
+      "level": "Cao"
+    },
+    {
+      "foodName": "Coca",
+      "predictedQuantity": 45,
+      "level": "Cao"
+    },
+    {
+      "foodName": "Milk Tea",
+      "predictedQuantity": 45,
+      "level": "Cao"
+    },
+    {
+      "foodName": "French Fries",
+      "predictedQuantity": 40,
+      "level": "Cao"
+    }
+  ],
+  "revenuePrediction": {
+    "tomorrow": 12429690,
+    "next7Days": 87007830
+  },
+  "suggestions": [
+    "Nên nhập thêm nguyên liệu cho Fried Chicken và Pizza vì có nhu cầu cao.",
+    "Nên khuyến mãi Salad để tăng lượt đặt.",
+    "Nên chuẩn bị thêm nhân sự vào khung giờ trưa và tối."
+  ],
+  "updatedAt": "2026-05-30T12:48:39.422885+00:00"
+}
