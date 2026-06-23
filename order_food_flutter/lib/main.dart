@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+// Web-only imports required by FeedbackPage (iframe approach)
+import 'dart:html' as html;
+import 'dart:ui_web' as ui;
+// webview_flutter removed for web-only iframe implementation
 
 import 'core/core.dart';
 import 'firebase_options.dart';
@@ -43,6 +47,7 @@ part 'screens/customer/food_detail_screen.dart';
 part 'screens/customer/food_list_screen.dart';
 part 'screens/customer/my_orders_screen.dart';
 part 'screens/customer/order_detail_screen.dart';
+part 'screens/customer/feedback_page.dart';
 part 'screens/splash/splash_screen.dart';
 part 'services/auth_service.dart';
 part 'services/food_service.dart';
@@ -65,6 +70,7 @@ part 'widgets/cart/cart_item_card.dart';
 part 'widgets/cart/cart_summary.dart';
 part 'widgets/cart/count_badge.dart';
 part 'widgets/order/order_status_badge.dart';
+part 'widgets/zoho/zoho_form_sheet.dart';
 part 'widgets/admin/dashboard_stat_card.dart';
 part 'widgets/admin/admin_notice.dart';
 part 'widgets/admin/ml_prediction_card.dart';
@@ -74,5 +80,8 @@ part 'widgets/empty_state.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Platform-specific WebView initialization is handled by the plugin
+  // and platform packages. No manual assignment here to avoid
+  // compatibility issues across webview_flutter versions.
   runApp(const OrderFoodApp());
 }

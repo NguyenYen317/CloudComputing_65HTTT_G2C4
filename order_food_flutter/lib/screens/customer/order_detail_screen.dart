@@ -54,6 +54,34 @@ extension OrderDetailScreenBuilder on _HomePageState {
             'Trạng thái đơn hàng được cập nhật bởi cửa hàng.',
             style: TextStyle(color: Colors.grey.shade600),
           ),
+          const SizedBox(height: 8),
+          if (order.status == OrderStatusModel.completed &&
+              !ratedOrders.contains(order.code)) ...[
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        FeedbackPage(order: order, user: currentUser!),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.star_border),
+              label: const Text('Đánh giá'),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.blueAccent.shade700),
+                foregroundColor: Colors.blueAccent.shade700,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

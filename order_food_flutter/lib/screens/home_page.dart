@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   List<Food> foods = [];
   List<CartItem> cart = [];
   List<OrderRecord> orders = [];
+  final Set<String> ratedOrders = {};
   List<AppUser> adminUsers = [];
   List<BigQueryOrderEvent> bigQueryEvents = [];
   MlPredictions? mlPredictions;
@@ -64,6 +65,14 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> markOrderRated(String code) async {
+    if (ratedOrders.contains(code)) return;
+    ratedOrders.add(code);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('ratedOrders', ratedOrders.toList());
+    if (mounted) setState(() {});
   }
 
   @override

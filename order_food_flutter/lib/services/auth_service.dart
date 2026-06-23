@@ -38,6 +38,10 @@ extension AuthServiceMethods on _HomePageState {
       }
     }
 
+    // load rated orders
+    final rated = prefs.getStringList('ratedOrders') ?? [];
+    setState(() => ratedOrders.addAll(rated));
+
     restoreCartFromStorage();
   }
 

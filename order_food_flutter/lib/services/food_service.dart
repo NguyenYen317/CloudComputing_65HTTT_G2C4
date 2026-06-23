@@ -25,7 +25,7 @@ extension FoodServiceMethods on _HomePageState {
     restoreCartFromStorage();
     await fetchCart();
   }
-
+// L34-46: Upload ảnh món ăn lên server và trả về URL của ảnh đã upload
   Future<String?> uploadFoodImage() async {
     final result = await FilePicker.pickFiles(
       type: FileType.image,
@@ -59,6 +59,8 @@ extension FoodServiceMethods on _HomePageState {
     return null;
   }
 
+// L74-90: Delete món ăn: 
+//Thay vì xóa hẳn món ăn khỏi database, ta sẽ gọi API để "ẩn" món ăn đó đi, tức là set một trường nào đó (ví dụ: isHidden) thành true. Khi hiển thị danh sách món ăn cho khách, ta sẽ lọc ra những món có isHidden = false để hiển thị. Cách này giúp giữ lại dữ liệu lịch sử đơn hàng liên quan đến món ăn đó, đồng thời vẫn cho phép admin quản lý lại những món đã ẩn nếu cần thiết.
   Future<void> deleteFood(Food food) async {
     final confirm = await showDialog<bool>(
       context: context,
