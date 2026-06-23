@@ -11,6 +11,11 @@ extension CustomerHomeScreenBuilder on _HomePageState {
           style: TextStyle(fontWeight: FontWeight.w800),
         ),
         actions: [
+          IconButton(
+            tooltip: 'Tải lại dữ liệu',
+            onPressed: loading ? null : refreshCustomerData,
+            icon: const Icon(Icons.refresh),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: Center(child: Text(currentUser!.name)),
@@ -63,5 +68,13 @@ extension CustomerHomeScreenBuilder on _HomePageState {
         ],
       ),
     );
+  }
+
+  Future<void> refreshCustomerData() async {
+    setState(() => loading = true);
+    await fetchFoods();
+    await fetchOrders();
+    if (!mounted) return;
+    showMessage('Đã tải lại dữ liệu');
   }
 }
